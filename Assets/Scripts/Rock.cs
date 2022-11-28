@@ -9,13 +9,19 @@ public class Rock : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBegi
 
     int pointerIDTouchingRock;
     float speed = 30f;
+
+    Vector3 startingPosition;
+    Quaternion startingRotation;
     void Start()
     {
+        GameManager.singleton.rocksInGame.Add(this);
         rb = this.GetComponent<Rigidbody2D>();
+        startingPosition = this.transform.position;
+        startingRotation = this.transform.rotation;
     }
     Vector2 directionToMove;
     Vector2 positionOfTouch;
-    void Update()
+    void FixedUpdate()
     {
         if (is_Touched)
         {
@@ -23,16 +29,12 @@ public class Rock : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBegi
             directionToMove = new Vector2(worldPosition.x - transform.position.x, worldPosition.y - transform.position.y);
             
             rb.velocity = directionToMove * speed;
-            Debug.Log(directionToMove);
         }
-    }
-    void FixedUpdate()
-    {
         if (!is_Touched)
         {
-            rb.velocity *= .8f;
+            rb.velocity *= .9f;
         }
-        rb.angularVelocity *= .8f;
+        rb.angularVelocity *= .9f;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -66,5 +68,13 @@ public class Rock : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBegi
         {
             positionOfTouch = eventData.position;
         }
+    }
+
+    public void ResetRock()
+    {
+        this.transform.position = startingPosition;
+        this.transform.rotation = startingRotation;
+        rb.velocity = Vector2.zero;
+        is_Touched = false;
     }
 }
