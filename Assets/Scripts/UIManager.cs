@@ -35,4 +35,7 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(0);
         GameboardAnalytics.singleton.SendGameEnd();
     }
+    public void OpenInstruction()
+    {
+    }
 }
